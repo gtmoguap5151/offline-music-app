@@ -11,6 +11,9 @@ const html = fs.readFileSync('index.html','utf8');
 if (!html.includes('navigator.serviceWorker.register')) throw new Error('Service worker registration missing');
 if (!html.includes("indexedDB.open('sound-sync'")) throw new Error('IndexedDB storage missing');
 if (!html.includes('makeDemoWav')) throw new Error('Self-contained demo audio generator missing');
+if (!html.includes('readId3')) throw new Error('MP3 metadata organizer missing');
+if (!html.includes('webkitdirectory')) throw new Error('Folder import missing');
+if (!html.includes('data-remove')) throw new Error('Individual track removal missing');
 
 const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
 if (!scripts.length) throw new Error('Inline app script missing');

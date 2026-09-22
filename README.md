@@ -14,7 +14,8 @@ The MVP intentionally avoids general web-search clutter and does not rip or bypa
 - Automatic song / artist / album organization
 - Offline library search
 - Download queue/progress
-- Local audio import
+- Smart local audio import using MP3 tags, folder names, and filename fallbacks
+- Duplicate protection and individual track removal
 - Offline playback + Media Session metadata
 - Storage manager
 - Installable PWA shell + service worker
