@@ -116,7 +116,10 @@ const context = {
       ok: true,
       json: async () => ({
         metadata: { identifier: 'jamendo-test', title: 'Real Album', creator: 'Real Artist', licenseurl: 'https://creativecommons.org/licenses/by/4.0/' },
-        files: [{ name: 'real-song.mp3', title: 'Real Song', artist: 'Real Artist', album: 'Real Album', format: 'VBR MP3', source: 'original', size: '1000000', length: '180' }]
+        files: [
+          { name: 'real-song.mp3', title: 'Real Song', artist: 'Real Artist', album: 'Real Album', format: 'VBR MP3', source: 'original', size: '1000000', length: '180' },
+          { name: 'explicit-song.mp3', title: 'Blowjob', artist: 'Explicit Artist', album: 'Real Album', format: 'VBR MP3', source: 'original', size: '1000000', length: '180' }
+        ]
       })
     };
     return { ok: false, json: async () => ({}) };
@@ -144,6 +147,7 @@ const app = context.__soundSyncTest;
 
 await app.searchMusic('real');
 if (!element('#results').innerHTML.includes('Real Song')) throw new Error('Remote catalog did not render');
+if (element('#results').innerHTML.includes('Blowjob')) throw new Error('Explicit catalog result was not filtered');
 if (!element('#playlists').innerHTML.includes('Create a playlist')) throw new Error('Playlist empty state did not render');
 
 const first = { id: 't1', title: 'First', artist: 'Artist', album: 'Album', art: 'FA', blob: new Blob(['a']), downloadedAt: 1 };
