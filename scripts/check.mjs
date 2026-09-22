@@ -1,11 +1,18 @@
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-const required = ['index.html','manifest.webmanifest','sw.js','icon.svg','README.md'];
+const required = ['index.html','manifest.webmanifest','sw.js','icon-180.png','icon-192.png','icon-512.png','icon-1024.png','README.md'];
 for (const file of required) {
   if (!fs.existsSync(file)) throw new Error('Missing required file: ' + file);
 }
-JSON.parse(fs.readFileSync('manifest.webmanifest','utf8'));
+const manifest = JSON.parse(fs.readFileSync('manifest.webmanifest','utf8'));
+for (const size of ['192x192','512x512','1024x1024']) {
+  if (!manifest.icons.some(icon => icon.sizes === size)) throw new Error('Missing app icon size: ' + size);
+}
+for (const [file, expected] of [['icon-180.png',180],['icon-192.png',192],['icon-512.png',512],['icon-1024.png',1024]]) {
+  const png = fs.readFileSync(file);
+  if (png.readUInt32BE(16) !== expected || png.readUInt32BE(20) !== expected) throw new Error('Incorrect dimensions: ' + file);
+}
 
 const html = fs.readFileSync('index.html','utf8');
 if (!html.includes('navigator.serviceWorker.register')) throw new Error('Service worker registration missing');
