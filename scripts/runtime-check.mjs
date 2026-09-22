@@ -97,6 +97,7 @@ const context = {
   Number,
   Math,
   Promise,
+  URLSearchParams,
   setTimeout,
   clearTimeout,
   encodeURIComponent,
@@ -105,7 +106,23 @@ const context = {
   indexedDB: { open: openDatabase },
   location: { hash: '' },
   MediaMetadata: class { constructor(value) { Object.assign(this, value); } },
+  fetch: async url => {
+    const value = String(url);
+    if (value.includes('advancedsearch.php')) return {
+      ok: true,
+      json: async () => ({ response: { docs: [{ identifier: 'jamendo-test', title: 'Real Album', creator: 'Real Artist', licenseurl: 'https://creativecommons.org/licenses/by/4.0/' }] } })
+    };
+    if (value.includes('/metadata/jamendo-test')) return {
+      ok: true,
+      json: async () => ({
+        metadata: { identifier: 'jamendo-test', title: 'Real Album', creator: 'Real Artist', licenseurl: 'https://creativecommons.org/licenses/by/4.0/' },
+        files: [{ name: 'real-song.mp3', title: 'Real Song', artist: 'Real Artist', album: 'Real Album', format: 'VBR MP3', source: 'original', size: '1000000', length: '180' }]
+      })
+    };
+    return { ok: false, json: async () => ({}) };
+  },
   navigator: {
+    onLine: true,
     serviceWorker: { register: () => Promise.resolve() },
     storage: { estimate: async () => ({ quota: 1_000_000_000 }), persist: async () => true }
   },
@@ -121,11 +138,12 @@ const context = {
 };
 context.globalThis = context;
 vm.createContext(context);
-vm.runInContext(source + '\n;globalThis.__soundSyncTest={put,putPlaylist,createPlaylist,renderPlaylists,playTrack,nextTrack,metadataForFile};', context);
+vm.runInContext(source + '\n;globalThis.__soundSyncTest={put,putPlaylist,createPlaylist,renderPlaylists,playTrack,nextTrack,metadataForFile,searchMusic};', context);
 await new Promise(resolve => setTimeout(resolve, 30));
 const app = context.__soundSyncTest;
 
-if (!element('#results').innerHTML.includes('Midnight Drive')) throw new Error('Catalog did not render');
+await app.searchMusic('real');
+if (!element('#results').innerHTML.includes('Real Song')) throw new Error('Remote catalog did not render');
 if (!element('#playlists').innerHTML.includes('Create a playlist')) throw new Error('Playlist empty state did not render');
 
 const first = { id: 't1', title: 'First', artist: 'Artist', album: 'Album', art: 'FA', blob: new Blob(['a']), downloadedAt: 1 };
