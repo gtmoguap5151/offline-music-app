@@ -5,9 +5,15 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#0b0f14",
   "theme_color": "#0b0f14",
+  "categories": ["music", "entertainment"],
+  "shortcuts": [
+    {"name":"Library","short_name":"Library","url":"./#library"},
+    {"name":"Playlists","short_name":"Playlists","url":"./#playlists"}
+  ],
   "icons": [
     {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]

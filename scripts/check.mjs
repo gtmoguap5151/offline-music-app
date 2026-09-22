@@ -13,7 +13,11 @@ if (!html.includes("indexedDB.open('sound-sync'")) throw new Error('IndexedDB st
 if (!html.includes('makeDemoWav')) throw new Error('Self-contained demo audio generator missing');
 if (!html.includes('readId3')) throw new Error('MP3 metadata organizer missing');
 if (!html.includes('webkitdirectory')) throw new Error('Folder import missing');
-if (!html.includes('data-remove')) throw new Error('Individual track removal missing');
+if (!html.includes('editDelete')) throw new Error('Individual track removal missing');
+if (!html.includes("indexedDB.open('sound-sync',3)")) throw new Error('Current database schema missing');
+if (!html.includes("createObjectStore('playlists'")) throw new Error('Playlist storage missing');
+if (!html.includes('miniPrev') || !html.includes('miniNext') || !html.includes('seek')) throw new Error('Player controls missing');
+if (!html.includes('renderPlaylists')) throw new Error('Playlist interface missing');
 
 const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
 if (!scripts.length) throw new Error('Inline app script missing');

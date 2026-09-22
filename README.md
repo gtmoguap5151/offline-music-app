@@ -17,6 +17,9 @@ The MVP intentionally avoids general web-search clutter and does not rip or bypa
 - Smart local audio import using MP3 tags, folder names, and filename fallbacks
 - Duplicate protection and individual track removal
 - Offline playback + Media Session metadata
+- Playback queue with previous, next, seek, and automatic continuation
+- Device-local playlists with per-track add/remove controls
+- Library sorting by newest, title, artist, or album
 - Storage manager
 - Installable PWA shell + service worker
 - FREE / PRO / CREATOR entitlement scaffold, with all current features FREE
