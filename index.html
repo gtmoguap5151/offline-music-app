@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f14">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Sound Sync</title>
+<style>
+:root{--bg:#0b0f14;--card:#131b26;--line:#243144;--text:#f5f7fb;--muted:#8f9aae;--accent:#66f0b5;--danger:#ff7f87}*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif}button,input{font:inherit}.app{max-width:540px;margin:auto;min-height:100vh;padding:16px 16px 162px}.top,.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.eyebrow{font-size:10px;letter-spacing:.18em;color:var(--accent);font-weight:800}h1,h2{margin:4px 0 12px}.hero,.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}.hero{margin:10px 0 14px;background:linear-gradient(135deg,#162333,#0f171f)}.hero p,.muted{color:var(--muted)}.search{width:100%;background:var(--card);border:1px solid var(--line);color:var(--text);padding:15px;border-radius:15px;outline:none}.tabs{display:flex;gap:8px;margin:12px 0}.tabs button{flex:1;background:var(--card);color:var(--muted);border:1px solid var(--line);padding:10px;border-radius:12px;font-weight:700}.tabs button.active{background:var(--text);color:#0b0f14}.stack{display:grid;gap:10px}.track{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:11px}.art{width:54px;height:54px;border-radius:13px;background:#1d2c3a;display:grid;place-items:center;color:var(--accent);font-weight:900;flex:none}.meta{min-width:0;flex:1}.meta strong,.meta span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta span{font-size:12px;color:var(--muted);margin-top:4px}.dl,.play,.ghost,.danger{border:0;border-radius:12px;padding:10px 12px;font-weight:800}.dl,.play{background:var(--accent);color:#07110c}.dl.done{background:#26392f;color:var(--accent)}.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}.danger{background:transparent;color:var(--danger);border:1px solid #5d2f36}.view{display:none}.view.active{display:block}.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,540px);height:70px;display:grid;grid-template-columns:repeat(4,1fr);background:#0a0e14;border-top:1px solid var(--line);z-index:5}.nav button{border:0;background:transparent;color:var(--muted);font-size:12px}.nav button.active{color:var(--accent)}.mini{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;width:min(calc(100% - 24px),516px);background:#151e2a;border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;align-items:center;gap:10px;z-index:6}.mini[hidden]{display:none}.setting{margin-bottom:10px}.empty{color:var(--muted);border:1px dashed var(--line);border-radius:16px;padding:24px;text-align:center}.pill{display:inline-block;padding:6px 9px;border-radius:999px;background:#183128;color:var(--accent);font-size:12px;font-weight:800}.progress{height:6px;background:#0e141d;border-radius:999px;overflow:hidden;margin-top:8px}.progress>i{display:block;height:100%;background:var(--accent)}.fav{border:0;background:transparent;color:var(--muted);font-size:20px;padding:8px}.fav.on{color:#ffd166}.small{font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div><div class="eyebrow">OFFLINE MUSIC</div><h1>Sound Sync</h1></div><button id="install" class="ghost" hidden>Install</button></div>
+  <section class="view active" data-view="search">
+    <div class="hero"><span class="pill">One tap. Done.</span><h2>Find music. Download it. Play offline.</h2><p>Music-only results. No articles, reaction videos, or random web junk.</p></div>
+    <input id="q" class="search" type="search" placeholder="Search songs, artists, albums">
+    <div class="tabs" id="searchTabs"><button class="active" data-type="songs">Songs</button><button data-type="artists">Artists</button><button data-type="albums">Albums</button></div>
+    <div id="results" class="stack"></div>
+  </section>
+  <section class="view" data-view="library">
+    <div class="row"><div><div class="eyebrow">YOUR MUSIC</div><h2>Library</h2></div><button id="favoritesOnly" class="ghost">★ Favorites</button></div>
+    <input id="libq" class="search" type="search" placeholder="Search downloaded music">
+    <div class="tabs" id="libTabs"><button class="active" data-type="songs">Songs</button><button data-type="artists">Artists</button><button data-type="albums">Albums</button></div>
+    <div id="library" class="stack"></div>
+  </section>
+  <section class="view" data-view="downloads">
+    <div class="row"><div><div class="eyebrow">OFFLINE</div><h2>Downloads</h2></div><span id="count" class="pill">0</span></div>
+    <div id="downloads" class="stack"></div>
+  </section>
+  <section class="view" data-view="settings">
+    <div class="eyebrow">CONTROL</div><h2>Settings</h2>
+    <div class="card setting"><div class="row"><div><strong>Storage used</strong><div id="storage" class="muted">0 MB</div></div><button id="clear" class="danger">Clear</button></div></div>
+    <div class="card setting"><div class="row"><div><strong>Import audio</strong><div class="muted small">Add music already on this phone.</div></div><label class="ghost">Choose<input id="import" type="file" accept="audio/*" multiple hidden></label></div></div>
+    <div class="card setting"><strong>Future access tiers</strong><p class="muted">FREE / PRO / CREATOR are scaffolded. Everything is free in this MVP.</p><span class="pill">FREE</span></div>
+    <div class="card setting"><strong>Rights</strong><p class="muted">The built-in catalog is generated demo audio. Future providers must explicitly authorize downloads. This app does not rip or bypass DRM.</p></div>
+  </section>
+</div>
+<div id="mini" class="mini" hidden><div class="art" id="miniArt">♪</div><div class="meta"><strong id="miniTitle"></strong><span id="miniArtist"></span></div><button id="miniPlay" class="play">▶</button></div>
+<nav class="nav"><button class="active" data-nav="search">Search</button><button data-nav="library">Library</button><button data-nav="downloads">Downloads</button><button data-nav="settings">Settings</button></nav>
+<audio id="audio"></audio>
+<script>
+const catalog=[
+{id:'d1',title:'Midnight Drive',artist:'Open Demo Artist',album:'Roadlights',art:'MD',notes:[220,277,330,440,330,277]},
+{id:'d2',title:'Open Road',artist:'Open Demo Artist',album:'Roadlights',art:'OR',notes:[196,247,294,392,294,247]},
+{id:'d3',title:'Quiet Sky',artist:'Public Demo Ensemble',album:'Night Air',art:'QS',notes:[262,330,392,523,392,330]},
+{id:'d4',title:'North Window',artist:'Public Demo Ensemble',album:'Night Air',art:'NW',notes:[247,311,370,494,370,311]},
+{id:'d5',title:'Copper Rain',artist:'Commons Session',album:'Field Notes',art:'CR',notes:[208,262,311,415,311,262]},
+{id:'d6',title:'Static Bloom',artist:'Commons Session',album:'Field Notes',art:'SB',notes:[165,208,247,330,247,208]}
+].map(t=>({...t,downloadable:true,rights:'Generated demo audio for this prototype'}));
+const tier={name:'FREE',features:{downloads:true,offline:true,playlists:true,creator:false}};
+let db,searchType='songs',libType='songs',jobs=[],now=null,nowUrl=null,deferred=null,favoritesOnly=false;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],audio=$('#audio');
+function openDB(){return new Promise((ok,no)=>{const r=indexedDB.open('sound-sync',2);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains('tracks'))d.createObjectStore('tracks',{keyPath:'id'})};r.onsuccess=()=>{db=r.result;ok()};r.onerror=()=>no(r.error)})}
+const os=(m='readonly')=>db.transaction('tracks',m).objectStore('tracks');
+const all=()=>new Promise((ok,no)=>{const r=os().getAll();r.onsuccess=()=>ok(r.result||[]);r.onerror=()=>no(r.error)});
+const get=id=>new Promise((ok,no)=>{const r=os().get(id);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const put=t=>new Promise((ok,no)=>{const r=os('readwrite').put(t);r.onsuccess=()=>ok();r.onerror=()=>no(r.error)});
+const del=id=>new Promise((ok,no)=>{const r=os('readwrite').delete(id);r.onsuccess=()=>ok();r.onerror=()=>no(r.error)});
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function empty(t){return '<div class="empty">'+esc(t)+'</div>'}
+function matches(t,q){q=q.trim().toLowerCase();return !q||[t.title,t.artist,t.album||''].some(v=>String(v).toLowerCase().includes(q))}
+function trackRow(t,downloaded=false,library=false){return '<div class="track" data-track="'+t.id+'"><div class="art">'+esc(t.art||'♪')+'</div><div class="meta"><strong>'+esc(t.title)+'</strong><span>'+esc(t.artist)+' · '+esc(t.album||'Imported')+'</span></div>'+(library?'<button class="fav '+(t.favorite?'on':'')+'" data-fav="'+t.id+'" aria-label="Favorite">★</button><button class="play" data-play="'+t.id+'">Play</button>':'<button class="dl '+(downloaded?'done':'')+'" data-download="'+t.id+'">'+(downloaded?'Downloaded ✓':'Download')+'</button>')+'</div>'}
+function groupRow(name,sub,action=''){return '<div class="track"><div class="art">♫</div><div class="meta"><strong>'+esc(name)+'</strong><span>'+esc(sub)+'</span></div>'+action+'</div>'}
+function makeDemoWav(track){const sampleRate=22050,secondsPerNote=.32,repeats=5,notes=track.notes||[220,330,440];const samplesPerNote=Math.floor(sampleRate*secondsPerNote),total=notes.length*repeats*samplesPerNote;const buffer=new ArrayBuffer(44+total*2),view=new DataView(buffer);const str=(o,s)=>{for(let i=0;i<s.length;i++)view.setUint8(o+i,s.charCodeAt(i))};str(0,'RIFF');view.setUint32(4,36+total*2,true);str(8,'WAVE');str(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,1,true);view.setUint32(24,sampleRate,true);view.setUint32(28,sampleRate*2,true);view.setUint16(32,2,true);view.setUint16(34,16,true);str(36,'data');view.setUint32(40,total*2,true);let idx=0;for(let r=0;r<repeats;r++)for(const freq of notes){for(let i=0;i<samplesPerNote;i++){const attack=Math.min(1,i/(sampleRate*.02)),release=Math.min(1,(samplesPerNote-i)/(sampleRate*.05)),env=Math.min(attack,release);const sample=Math.sin(2*Math.PI*freq*i/sampleRate)*.2*env;view.setInt16(44+(idx++)*2,Math.max(-1,Math.min(1,sample))*32767,true)}}return new Blob([buffer],{type:'audio/wav'})}
+async function renderSearch(){const q=$('#q').value,downloaded=new Set((await all()).map(t=>t.id)),list=catalog.filter(t=>matches(t,q));if(searchType==='songs'){$('#results').innerHTML=list.map(t=>trackRow(t,downloaded.has(t.id))).join('')||empty('No songs found.');$$('[data-download]').forEach(b=>b.onclick=e=>{e.stopPropagation();downloadTrack(b.dataset.download,b)});return}const key=searchType==='artists'?'artist':'album',vals=[...new Set(list.map(t=>t[key]))];$('#results').innerHTML=vals.map(v=>{const members=list.filter(t=>t[key]===v);const action=searchType==='albums'?'<button class="dl" data-album="'+esc(v)+'">Download album</button>':'';return groupRow(v,members.length+' track(s)',action)}).join('')||empty('Nothing found.');$$('[data-album]').forEach(b=>b.onclick=()=>downloadAlbum(b.dataset.album))}
+async function downloadAlbum(album){for(const t of catalog.filter(x=>x.album===album)){if(!(await get(t.id)))await downloadTrack(t.id,null)}renderSearch()}
+async function downloadTrack(id,btn){if(!tier.features.downloads)return;const exists=await get(id);if(exists){if(btn)btn.textContent='Downloaded ✓';return}const t=catalog.find(x=>x.id===id);if(!t||!t.downloadable)return;if(btn){btn.disabled=true;btn.textContent='Downloading…'}const j={id,title:t.title,status:'downloading',progress:15};jobs.unshift(j);renderDownloads();try{await new Promise(r=>setTimeout(r,120));j.progress=55;renderDownloads();const blob=makeDemoWav(t);await put({...t,blob,size:blob.size,downloadedAt:Date.now(),favorite:false});j.progress=100;j.status='complete';if(btn){btn.classList.add('done');btn.textContent='Downloaded ✓'}renderDownloads();renderLibrary();renderStorage()}catch(e){j.status='failed';if(btn){btn.disabled=false;btn.textContent='Retry'}renderDownloads()}finally{if(btn)btn.disabled=false}}
+async function renderLibrary(){let list=(await all()).filter(t=>matches(t,$('#libq').value));if(favoritesOnly)list=list.filter(t=>t.favorite);if(libType==='songs'){$('#library').innerHTML=list.map(t=>trackRow(t,true,true)).join('')||empty(favoritesOnly?'No favorites yet.':'Download a song and it appears here automatically.');$$('[data-play]').forEach(b=>b.onclick=()=>playTrack(b.dataset.play));$$('[data-fav]').forEach(b=>b.onclick=()=>toggleFavorite(b.dataset.fav));return}const key=libType==='artists'?'artist':'album',vals=[...new Set(list.map(t=>t[key]||'Imported'))];$('#library').innerHTML=vals.map(v=>groupRow(v,list.filter(t=>(t[key]||'Imported')===v).length+' downloaded')).join('')||empty('Nothing here yet.')}
+async function toggleFavorite(id){const t=await get(id);if(!t)return;t.favorite=!t.favorite;await put(t);renderLibrary()}
+function renderDownloads(){$('#count').textContent=jobs.length;$('#downloads').innerHTML=jobs.length?jobs.map(j=>'<div class="card"><strong>'+esc(j.title)+'</strong><div class="muted">'+esc(j.status)+'</div><div class="progress"><i style="width:'+j.progress+'%"></i></div></div>').join(''):empty('Your download queue is empty.')}
+async function playTrack(id){const t=await get(id);if(!t)return;if(nowUrl)URL.revokeObjectURL(nowUrl);now=t;nowUrl=URL.createObjectURL(t.blob);audio.src=nowUrl;$('#mini').hidden=false;$('#miniTitle').textContent=t.title;$('#miniArtist').textContent=t.artist;$('#miniArt').textContent=t.art||'♪';if('mediaSession'in navigator){navigator.mediaSession.metadata=new MediaMetadata({title:t.title,artist:t.artist,album:t.album||'Imported'});navigator.mediaSession.setActionHandler('play',()=>audio.play());navigator.mediaSession.setActionHandler('pause',()=>audio.pause())}await audio.play();syncPlay()}
+function syncPlay(){$('#miniPlay').textContent=audio.paused?'▶':'❚❚'}audio.onplay=syncPlay;audio.onpause=syncPlay;$('#miniPlay').onclick=()=>{if(!audio.src)return;audio.paused?audio.play():audio.pause()};
+async function renderStorage(){const list=await all(),bytes=list.reduce((n,t)=>n+(t.size||t.blob?.size||0),0);let quota='';if(navigator.storage?.estimate){const e=await navigator.storage.estimate();if(e.quota)quota=' · '+(e.quota/1024/1024).toFixed(0)+' MB available quota'}$('#storage').textContent=list.length+' track(s) · '+(bytes/1024/1024).toFixed(2)+' MB'+quota}
+$('#clear').onclick=async()=>{for(const t of await all())await del(t.id);audio.pause();$('#mini').hidden=true;jobs=[];renderDownloads();renderLibrary();renderSearch();renderStorage()};
+$('#import').onchange=async e=>{for(const f of e.target.files){await put({id:'local-'+crypto.randomUUID(),title:f.name.replace(/.[^.]+$/,''),artist:'Local file',album:'Imported',art:'♪',blob:f,size:f.size,downloadedAt:Date.now(),favorite:false})}e.target.value='';renderLibrary();renderStorage()};
+$$('[data-nav]').forEach(b=>b.onclick=()=>{$$('[data-nav]').forEach(x=>x.classList.toggle('active',x===b));$$('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===b.dataset.nav));if(b.dataset.nav==='library')renderLibrary();if(b.dataset.nav==='settings')renderStorage()});
+$('#q').oninput=renderSearch;$('#libq').oninput=renderLibrary;$('#favoritesOnly').onclick=()=>{favoritesOnly=!favoritesOnly;renderLibrary()};
+$('#searchTabs').onclick=e=>{const b=e.target.closest('button[data-type]');if(!b)return;searchType=b.dataset.type;$$('#searchTabs button').forEach(x=>x.classList.toggle('active',x===b));renderSearch()};
+$('#libTabs').onclick=e=>{const b=e.target.closest('button[data-type]');if(!b)return;libType=b.dataset.type;$$('#libTabs button').forEach(x=>x.classList.toggle('active',x===b));renderLibrary()};
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('#install').hidden=false});$('#install').onclick=async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;$('#install').hidden=true};
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+openDB().then(()=>{renderSearch();renderLibrary();renderDownloads();renderStorage()});
+</script>
+</body>
+</html>
